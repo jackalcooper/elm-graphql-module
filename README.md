@@ -7,3 +7,5 @@ After the upgrade for 0.18. The generated code should be updated as well but I d
 
 After upgrade it only support POST method(Elm package side. The generator side still send GET when it is fetching Schema). 
 
+It's totally doable to support other HTTP method but I want to make sure the POST method works in the right right way first.
+
