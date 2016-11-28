@@ -2,7 +2,7 @@ module GraphQL
     exposing
         ( query
         , mutation
-        , apply_
+        , apply
         , maybeEncode
         )
 
@@ -14,7 +14,6 @@ module GraphQL
 
 -}
 
-import Task exposing (Task)
 import Json.Decode exposing (..)
 import Json.Encode exposing (..)
 import Http exposing (..)
@@ -22,25 +21,25 @@ import Http exposing (..)
 
 {-| Executes a GraphQL query.
 -}
-query : String -> String -> String -> String -> Json.Encode.Value -> Decoder a -> Task Http.Error a
+query : String -> String -> String -> String -> Json.Encode.Value -> Decoder a -> Request a
 query method url query operation variables decoder =
     fetch method url query operation variables decoder
 
 
 {-| Executes a GraphQL mutation.
 -}
-mutation : String -> String -> String -> Json.Encode.Value -> Decoder a -> Task Http.Error a
+mutation : String -> String -> String -> Json.Encode.Value -> Decoder a -> Request a
 mutation url query operation variables decoder =
     fetch "POST" url query operation variables decoder
 
 
-fetch : String -> String -> String -> String -> Json.Encode.Value -> Decoder a -> Task Http.Error a
+fetch : String -> String -> String -> String -> Json.Encode.Value -> Decoder a -> Request a
 fetch verb url query operation variables decoder =
     let
         request =
             buildRequestWithBody "POST" url query operation variables decoder
     in
-        Http.toTask request
+        request
 
 
 buildRequestWithBody : String -> String -> String -> String -> Json.Encode.Value -> Decoder a -> Http.Request a
@@ -78,8 +77,8 @@ queryResult decoder =
 
 {-| Combines two object decoders.
 -}
-apply_ : Decoder (a -> b) -> Decoder a -> Decoder b
-apply_ func value =
+apply : Decoder (a -> b) -> Decoder a -> Decoder b
+apply func value =
     map2 (<|) func value
 
 
