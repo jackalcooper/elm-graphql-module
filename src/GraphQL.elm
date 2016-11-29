@@ -58,7 +58,7 @@ buildRequestWithBody verb url query operation variables decoder =
                 [ (header "Accept" "application/json")
                 , (header "Content-Type" "application/json")
                 ]
-            , url = Http.encodeUri url
+            , url = url
             , body = Http.jsonBody <| params
             , expect = expectJson decoder
             , timeout = Nothing
